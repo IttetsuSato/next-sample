@@ -9,6 +9,9 @@ concurrency:
 jobs:
   lint:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sample-project
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -22,6 +25,9 @@ jobs:
 
   test-storybook:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sample-project
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -39,6 +45,9 @@ jobs:
 
   test-vitest:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sample-project
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
