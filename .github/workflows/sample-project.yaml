@@ -13,22 +13,25 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version-file: sample-project/.node-version
+          node-version-file: .node-version
           cache: "npm"
-          cache-dependency-path: sample-project/package-lock.json
+          cache-dependency-path: package-lock.json
       - run: npm ci
       - run: npm run typecheck
       - run: npm run lint
 
   test-storybook:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sample-project
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version-file: sample-project/.node-version
+          node-version-file: .node-version
           cache: "npm"
-          cache-dependency-path: sample-project/package-lock.json
+          cache-dependency-path: package-lock.json
       - run: npm ci
       - run: npx playwright install --with-deps
       - run: npm run build-storybook
@@ -39,12 +42,15 @@ jobs:
 
   test-vitest:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sample-project
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version-file: sample-project/.node-version
+          node-version-file: .node-version
           cache: "npm"
-          cache-dependency-path: sample-project/package-lock.json
+          cache-dependency-path: package-lock.json
       - run: npm ci
       - run: npm run test:vitest
