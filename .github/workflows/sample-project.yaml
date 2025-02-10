@@ -1,0 +1,68 @@
+name: sample-project
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - /**
+  pull_request:
+    paths:
+      - /**
+      - .github/workflows/sample-project.yml
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sample-project
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: sample-project/.node-version
+          cache: "npm"
+          cache-dependency-path: sample-project/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+
+  test-storybook:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sample-project
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: sample-project/.node-version
+          cache: "npm"
+          cache-dependency-path: sample-project/package-lock.json
+      - run: npm ci
+      - run: npx playwright install --with-deps
+      - run: npm run build-storybook
+      - run: |
+          npx concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
+            "npx http-server storybook-static --port 7007 --silent" \
+            "npx wait-on tcp:7007 && npm run test:storybook"
+
+  test-vitest:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sample-project
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: sample-project/.node-version
+          cache: "npm"
+          cache-dependency-path: sample-project/package-lock.json
+      - run: npm ci
+      - run: npm run test:vitest
