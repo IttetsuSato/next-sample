@@ -8,7 +8,8 @@
     "start": "next start",
     "check": "biome check .",
     "lint": "biome lint .",
-    "fix": "biome check --write ."
+    "fix": "biome check --write .",
+    "test": "vitest"
   },
   "dependencies": {
     "next": "15.1.6",
@@ -17,9 +18,15 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^16.2.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "typescript": "^5"
+    "@vitejs/plugin-react": "^4.3.4",
+    "jsdom": "^26.0.0",
+    "typescript": "^5",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^3.0.5"
   }
 }
