@@ -1,15 +1,6 @@
 name: sample-project
 
-on:
-  push:
-    branches:
-      - main
-    paths:
-      - /**
-  pull_request:
-    paths:
-      - /**
-      - .github/workflows/sample-project.yml
+on: [push]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -18,9 +9,6 @@ concurrency:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: sample-project
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -34,9 +22,6 @@ jobs:
 
   test-storybook:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: sample-project
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -49,14 +34,11 @@ jobs:
       - run: npm run build-storybook
       - run: |
           npx concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
-            "npx http-server storybook-static --port 7007 --silent" \
-            "npx wait-on tcp:7007 && npm run test:storybook"
+            "npx http-server storybook-static --port 6006 --silent" \
+            "npx wait-on tcp:6006 && npm run test:storybook"
 
   test-vitest:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: sample-project
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
